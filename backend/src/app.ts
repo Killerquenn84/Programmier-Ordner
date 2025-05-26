@@ -5,12 +5,18 @@ import { rateLimit } from 'express-rate-limit';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { auditLogMiddleware } from './utils/auditLogger';
-import { encryptionMiddleware } from './utils/encryption';
-import appointmentRoutes from './routes/appointments';
+import { 
+  encryptRequestData, 
+  decryptResponseData, 
+  encryptDatabaseQuery, 
+  encryptUrlParams 
+} from './middleware/encryption.middleware';
+import appointmentRoutes from './modules/appointment/appointment.routes';
 import authRoutes from './routes/auth';
 import { config } from './config';
 import userRoutes from './modules/user/user.routes';
 import patientRoutes from './modules/patient/patient.routes';
+import doctorRoutes from './modules/doctor/doctor.routes';
 
 // Umgebungsvariablen laden
 dotenv.config();
@@ -67,16 +73,11 @@ app.use(limiter);
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// Verschlüsselung für sensible Daten
-app.use(encryptionMiddleware([
-  'email',
-  'phoneNumber',
-  'address',
-  'notes',
-  'diagnosis',
-  'prescription',
-  'insuranceNumber'
-]));
+// Verschlüsselungs-Middleware
+app.use(encryptRequestData);
+app.use(decryptResponseData);
+app.use(encryptDatabaseQuery);
+app.use(encryptUrlParams);
 
 // Audit-Logging für alle Routen
 app.use(auditLogMiddleware('SYSTEM'));
@@ -86,6 +87,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/patients', patientRoutes);
+app.use('/api/doctors', doctorRoutes);
 
 // Datenbankverbindung
 mongoose.connect(config.mongoUri)
