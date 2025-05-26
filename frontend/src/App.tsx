@@ -1,9 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, CssBaseline } from '@mui/material';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './contexts/AuthContext';
 import { PatientProvider } from './contexts/PatientContext';
 import theme from './theme';
+
+// Création d'un client de requête
+const queryClient = new QueryClient();
 
 // Komponenten
 import DoctorLogin from './components/DoctorLogin';
@@ -20,11 +24,12 @@ import Layout from './components/Layout';
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
-        <PatientProvider>
-          <Router>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AuthProvider>
+          <PatientProvider>
+            <Router>
             <Layout>
               <Routes>
                 {/* Öffentliche Routen */}
@@ -52,9 +57,10 @@ const App: React.FC = () => {
               </Routes>
             </Layout>
           </Router>
-        </PatientProvider>
-      </AuthProvider>
-    </ThemeProvider>
+          </PatientProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };
 

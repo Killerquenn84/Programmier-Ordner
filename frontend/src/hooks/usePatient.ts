@@ -1,118 +1,100 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { patientApi, Patient, Diagnosis, Medication, Document } from '../services/api';
 
 export const usePatient = (patientId: string) => {
   const queryClient = useQueryClient();
 
   // Patienten-Daten
-  const { data: patient, isLoading: isLoadingPatient } = useQuery(
-    ['patient', patientId],
-    () => patientApi.getPatient(patientId).then(res => res.data)
-  );
+  const { data: patient, isLoading: isLoadingPatient } = useQuery({
+    queryKey: ['patient', patientId],
+    queryFn: () => patientApi.getPatient(patientId).then(res => res.data)
+  });
 
-  const updatePatientMutation = useMutation(
-    (data: Partial<Patient>) => patientApi.updatePatient(patientId, data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['patient', patientId]);
-      },
+  const updatePatientMutation = useMutation({
+    mutationFn: (data: Partial<Patient>) => patientApi.updatePatient(patientId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['patient', patientId] });
     }
-  );
+  });
 
   // Diagnosen
-  const { data: diagnoses, isLoading: isLoadingDiagnoses } = useQuery(
-    ['diagnoses', patientId],
-    () => patientApi.getDiagnoses(patientId).then(res => res.data)
-  );
+  const { data: diagnoses, isLoading: isLoadingDiagnoses } = useQuery({
+    queryKey: ['diagnoses', patientId],
+    queryFn: () => patientApi.getDiagnoses(patientId).then(res => res.data)
+  });
 
-  const createDiagnosisMutation = useMutation(
-    (data: Omit<Diagnosis, 'id' | 'patientId'>) => 
+  const createDiagnosisMutation = useMutation({
+    mutationFn: (data: Omit<Diagnosis, 'id' | 'patientId'>) => 
       patientApi.createDiagnosis(patientId, data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['diagnoses', patientId]);
-      },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['diagnoses', patientId] });
     }
-  );
+  });
 
-  const updateDiagnosisMutation = useMutation(
-    ({ diagnosisId, data }: { diagnosisId: string; data: Partial<Diagnosis> }) =>
+  const updateDiagnosisMutation = useMutation({
+    mutationFn: ({ diagnosisId, data }: { diagnosisId: string; data: Partial<Diagnosis> }) =>
       patientApi.updateDiagnosis(patientId, diagnosisId, data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['diagnoses', patientId]);
-      },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['diagnoses', patientId] });
     }
-  );
+  });
 
-  const deleteDiagnosisMutation = useMutation(
-    (diagnosisId: string) => patientApi.deleteDiagnosis(patientId, diagnosisId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['diagnoses', patientId]);
-      },
+  const deleteDiagnosisMutation = useMutation({
+    mutationFn: (diagnosisId: string) => patientApi.deleteDiagnosis(patientId, diagnosisId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['diagnoses', patientId] });
     }
-  );
+  });
 
   // Medikamente
-  const { data: medications, isLoading: isLoadingMedications } = useQuery(
-    ['medications', patientId],
-    () => patientApi.getMedications(patientId).then(res => res.data)
-  );
+  const { data: medications, isLoading: isLoadingMedications } = useQuery({
+    queryKey: ['medications', patientId],
+    queryFn: () => patientApi.getMedications(patientId).then(res => res.data)
+  });
 
-  const createMedicationMutation = useMutation(
-    (data: Omit<Medication, 'id' | 'patientId'>) =>
+  const createMedicationMutation = useMutation({
+    mutationFn: (data: Omit<Medication, 'id' | 'patientId'>) =>
       patientApi.createMedication(patientId, data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['medications', patientId]);
-      },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['medications', patientId] });
     }
-  );
+  });
 
-  const updateMedicationMutation = useMutation(
-    ({ medicationId, data }: { medicationId: string; data: Partial<Medication> }) =>
+  const updateMedicationMutation = useMutation({
+    mutationFn: ({ medicationId, data }: { medicationId: string; data: Partial<Medication> }) =>
       patientApi.updateMedication(patientId, medicationId, data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['medications', patientId]);
-      },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['medications', patientId] });
     }
-  );
+  });
 
-  const deleteMedicationMutation = useMutation(
-    (medicationId: string) => patientApi.deleteMedication(patientId, medicationId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['medications', patientId]);
-      },
+  const deleteMedicationMutation = useMutation({
+    mutationFn: (medicationId: string) => patientApi.deleteMedication(patientId, medicationId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['medications', patientId] });
     }
-  );
+  });
 
   // Dokumente
-  const { data: documents, isLoading: isLoadingDocuments } = useQuery(
-    ['documents', patientId],
-    () => patientApi.getDocuments(patientId).then(res => res.data)
-  );
+  const { data: documents, isLoading: isLoadingDocuments } = useQuery({
+    queryKey: ['documents', patientId],
+    queryFn: () => patientApi.getDocuments(patientId).then(res => res.data)
+  });
 
-  const uploadDocumentMutation = useMutation(
-    ({ file, onProgress }: { file: File; onProgress?: (progress: number) => void }) =>
+  const uploadDocumentMutation = useMutation({
+    mutationFn: ({ file, onProgress }: { file: File; onProgress?: (progress: number) => void }) =>
       patientApi.uploadDocument(patientId, file, onProgress),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['documents', patientId]);
-      },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents', patientId] });
     }
-  );
+  });
 
-  const deleteDocumentMutation = useMutation(
-    (documentId: string) => patientApi.deleteDocument(patientId, documentId),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['documents', patientId]);
-      },
+  const deleteDocumentMutation = useMutation({
+    mutationFn: (documentId: string) => patientApi.deleteDocument(patientId, documentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['documents', patientId] });
     }
-  );
+  });
 
   return {
     // Patienten-Daten
