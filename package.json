@@ -1,0 +1,29 @@
+{
+  "name": "healthcare-saas",
+  "version": "1.0.0",
+  "description": "SaaS-Lösung für das deutsche Gesundheitssystem",
+  "scripts": {
+    "start:dev": "concurrently \"npm run start:dev:backend\" \"npm run start:dev:frontend\"",
+    "start:dev:backend": "cd backend && mvn spring-boot:run",
+    "start:dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd frontend && npm install",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && mvn test",
+    "test:frontend": "cd frontend && npm test"
+  },
+  "dependencies": {
+    "@mui/icons-material": "^7.1.0",
+    "axios": "^1.9.0",
+    "concurrently": "^8.2.2",
+    "crypto-js": "^4.2.0",
+    "formik": "^2.4.6",
+    "jwt-decode": "^4.0.0",
+    "react-dropzone": "^14.3.8",
+    "react-query": "^3.39.3",
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "typescript": "^5.3.3"
+  }
+}

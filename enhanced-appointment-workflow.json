@@ -1,0 +1,229 @@
+{
+  "name": "Enhanced Patient-Arzt Terminbuchungssystem",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "welcome",
+        "responseMode": "lastNode",
+        "options": {
+          "rawBody": true
+        },
+        "authentication": "headerAuth"
+      },
+      "name": "Welcome Page",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 400],
+      "webhookId": "welcome-page"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Load configuration and utilities\nconst config = $getWorkflowStaticData('global').config;\nconst utils = require('./utils.js');\n\n// Validate request\ntry {\n  utils.checkRateLimit(items[0].headers['x-forwarded-for']);\n  \n  return [{\n    json: {\n      success: true,\n      message: 'Welcome to the Appointment System',\n      version: '2.0',\n      features: [\n        'Doctor Search',\n        'Appointment Booking',\n        'Calendar Management',\n        'Staff Administration'\n      ]\n    }\n  }];\n} catch (error) {\n  return [{ json: utils.handleError(error, { page: 'welcome' }) }];\n}"
+      },
+      "name": "Process Welcome",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [500, 400]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "search-doctor",
+        "responseMode": "lastNode",
+        "options": {
+          "rawBody": true
+        },
+        "authentication": "headerAuth"
+      },
+      "name": "Doctor Search Endpoint",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 500]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Search doctor functionality\nconst utils = require('./utils.js');\n\ntry {\n  const { searchTerm, specialty, location } = items[0].json;\n  \n  // Validate inputs\n  if (!searchTerm && !specialty && !location) {\n    throw new Error('At least one search parameter is required');\n  }\n  \n  // Perform search (mock data for example)\n  const doctors = [\n    {\n      id: 'doc1',\n      name: 'Dr. Schmidt',\n      specialty: 'Allgemeinmedizin',\n      location: 'Berlin',\n      availability: true\n    },\n    {\n      id: 'doc2',\n      name: 'Dr. Mueller',\n      specialty: 'Kardiologie',\n      location: 'Hamburg',\n      availability: true\n    }\n  ];\n  \n  // Filter results\n  const results = doctors.filter(doc => {\n    return (!searchTerm || doc.name.toLowerCase().includes(searchTerm.toLowerCase())) &&\n           (!specialty || doc.specialty === specialty) &&\n           (!location || doc.location === location);\n  });\n  \n  utils.logOperation('doctor_search', { searchTerm, specialty, location });\n  \n  return [{\n    json: {\n      success: true,\n      results,\n      count: results.length\n    }\n  }];\n} catch (error) {\n  return [{ json: utils.handleError(error, { operation: 'doctor_search' }) }];\n}"
+      },
+      "name": "Process Doctor Search",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [500, 500]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "book-appointment",
+        "responseMode": "lastNode",
+        "options": {
+          "rawBody": true
+        },
+        "authentication": "headerAuth"
+      },
+      "name": "Booking Endpoint",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 600]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Appointment booking functionality\nconst utils = require('./utils.js');\nconst appointmentFuncs = require('./appointment-functions.js');\n\ntry {\n  const {\n    doctorId,\n    patientId,\n    date,\n    time,\n    patientEmail,\n    patientPhone\n  } = items[0].json;\n  \n  // Validate all required fields\n  if (!doctorId || !patientId || !date || !time || !patientEmail) {\n    throw new Error('Missing required fields');\n  }\n  \n  // Validate email and phone\n  if (!utils.validateEmail(patientEmail)) {\n    throw new Error('Invalid email address');\n  }\n  if (patientPhone && !utils.validatePhone(patientPhone)) {\n    throw new Error('Invalid phone number');\n  }\n  \n  // Check appointment time validity\n  utils.validateAppointmentTime(date, time);\n  \n  // Create appointment\n  const appointment = await appointmentFuncs.bookAppointment({\n    doctorId,\n    patientId,\n    date,\n    time,\n    patientEmail,\n    patientPhone\n  });\n  \n  // Send confirmation email\n  const emailResult = await utils.sendEmail('CONFIRMATION', {\n    recipientEmail: patientEmail,\n    patientName: items[0].json.patientName,\n    date,\n    time,\n    doctorName: items[0].json.doctorName\n  });\n  \n  return [{\n    json: {\n      success: true,\n      appointment,\n      emailSent: emailResult.success\n    }\n  }];\n} catch (error) {\n  return [{ json: utils.handleError(error, { operation: 'appointment_booking' }) }];\n}"
+      },
+      "name": "Process Booking",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [500, 600]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "admin/appointments",
+        "responseMode": "lastNode",
+        "options": {
+          "rawBody": true
+        },
+        "authentication": "headerAuth"
+      },
+      "name": "Admin Appointment Management",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 700]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Admin appointment management\nconst utils = require('./utils.js');\nconst appointmentFuncs = require('./appointment-functions.js');\n\ntry {\n  const { action, appointmentData, staffId } = items[0].json;\n  \n  // Verify staff permissions\n  if (!staffId) {\n    throw new Error('Staff ID required');\n  }\n  \n  let result;\n  \n  switch (action) {\n    case 'create':\n      result = await appointmentFuncs.handleManualEntry({\n        ...appointmentData,\n        staffId\n      });\n      break;\n      \n    case 'cancel':\n      result = await appointmentFuncs.handleCancellation({\n        appointmentId: appointmentData.id,\n        reason: appointmentData.reason,\n        canceledBy: staffId\n      });\n      break;\n      \n    case 'reschedule':\n      result = await appointmentFuncs.rescheduleAppointment({\n        ...appointmentData,\n        modifiedBy: staffId\n      });\n      break;\n      \n    default:\n      throw new Error('Invalid action');\n  }\n  \n  utils.logOperation('admin_appointment_management', {\n    action,\n    staffId,\n    result\n  });\n  \n  return [{\n    json: {\n      success: true,\n      result\n    }\n  }];\n} catch (error) {\n  return [{ json: utils.handleError(error, { operation: 'admin_appointment' }) }];\n}"
+      },
+      "name": "Process Admin Action",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [500, 700]
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "doctor/calendar/:doctorId",
+        "responseMode": "lastNode",
+        "options": {
+          "rawBody": true
+        },
+        "authentication": "headerAuth"
+      },
+      "name": "Doctor Calendar Endpoint",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 800]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Doctor calendar management\nconst utils = require('./utils.js');\n\ntry {\n  const { doctorId } = items[0].params;\n  const { startDate, endDate } = items[0].query;\n  \n  // Validate dates\n  if (!startDate || !endDate) {\n    throw new Error('Start and end dates are required');\n  }\n  \n  // Get appointments (mock data)\n  const appointments = [\n    {\n      id: 'apt1',\n      date: '2024-01-20',\n      time: '09:00',\n      patientName: 'Max Mustermann',\n      status: 'CONFIRMED'\n    },\n    {\n      id: 'apt2',\n      date: '2024-01-20',\n      time: '10:00',\n      patientName: 'Maria Schmidt',\n      status: 'PENDING'\n    }\n  ];\n  \n  utils.logOperation('calendar_view', {\n    doctorId,\n    startDate,\n    endDate\n  });\n  \n  return [{\n    json: {\n      success: true,\n      appointments,\n      doctorId\n    }\n  }];\n} catch (error) {\n  return [{ json: utils.handleError(error, { operation: 'calendar_view' }) }];\n}"
+      },
+      "name": "Process Calendar View",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [500, 800]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "notifications/send",
+        "responseMode": "lastNode",
+        "options": {
+          "rawBody": true
+        },
+        "authentication": "headerAuth"
+      },
+      "name": "Notification Endpoint",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [300, 900]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Notification handling\nconst utils = require('./utils.js');\nconst emailTemplates = require('./email-templates.js');\n\ntry {\n  const {\n    type,\n    recipientEmail,\n    recipientPhone,\n    templateData\n  } = items[0].json;\n  \n  // Validate recipient contact\n  if (!recipientEmail && !recipientPhone) {\n    throw new Error('Either email or phone is required');\n  }\n  \n  if (recipientEmail && !utils.validateEmail(recipientEmail)) {\n    throw new Error('Invalid email address');\n  }\n  \n  if (recipientPhone && !utils.validatePhone(recipientPhone)) {\n    throw new Error('Invalid phone number');\n  }\n  \n  // Send notifications\n  const results = [];\n  \n  if (recipientEmail) {\n    const emailResult = await emailTemplates.sendEmail(\n      type,\n      {\n        recipientEmail,\n        ...templateData\n      }\n    );\n    results.push({ channel: 'email', ...emailResult });\n  }\n  \n  if (recipientPhone) {\n    // SMS implementation would go here\n    results.push({ channel: 'sms', status: 'not_implemented' });\n  }\n  \n  utils.logOperation('notification_sent', {\n    type,\n    recipientEmail,\n    recipientPhone\n  });\n  \n  return [{\n    json: {\n      success: true,\n      results\n    }\n  }];\n} catch (error) {\n  return [{ json: utils.handleError(error, { operation: 'send_notification' }) }];\n}"
+      },
+      "name": "Process Notification",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [500, 900]
+    }
+  ],
+  "connections": {
+    "Welcome Page": {
+      "main": [[{"node": "Process Welcome", "type": "main", "index": 0}]]
+    },
+    "Doctor Search Endpoint": {
+      "main": [[{"node": "Process Doctor Search", "type": "main", "index": 0}]]
+    },
+    "Booking Endpoint": {
+      "main": [[{"node": "Process Booking", "type": "main", "index": 0}]]
+    },
+    "Admin Appointment Management": {
+      "main": [[{"node": "Process Admin Action", "type": "main", "index": 0}]]
+    },
+    "Doctor Calendar Endpoint": {
+      "main": [[{"node": "Process Calendar View", "type": "main", "index": 0}]]
+    },
+    "Notification Endpoint": {
+      "main": [[{"node": "Process Notification", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "error-handling"
+  },
+  "staticData": {
+    "global": {
+      "config": {
+        "email": {
+          "retryAttempts": 3,
+          "retryDelay": 300
+        },
+        "security": {
+          "rateLimit": {
+            "windowMs": 900000,
+            "maxRequests": 100
+          },
+          "jwt": {
+            "expiresIn": "1h"
+          }
+        },
+        "appointments": {
+          "minNotice": 24,
+          "maxFutureBooking": 90,
+          "reminderTimes": [24, 48],
+          "cancelationPolicy": {
+            "minHours": 24,
+            "penalty": false
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    "terminbuchung",
+    "praxis",
+    "arzt",
+    "patient",
+    "calendar",
+    "appointments"
+  ],
+  "pinData": {},
+  "versionId": 1,
+  "triggerCount": 6,
+  "nodes": [
+    "Welcome Page",
+    "Process Welcome",
+    "Doctor Search Endpoint",
+    "Process Doctor Search",
+    "Booking Endpoint",
+    "Process Booking",
+    "Admin Appointment Management",
+    "Process Admin Action",
+    "Doctor Calendar Endpoint",
+    "Process Calendar View",
+    "Notification Endpoint",
+    "Process Notification"
+  ]
+}

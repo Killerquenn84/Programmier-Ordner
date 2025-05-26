@@ -1,0 +1,28 @@
+{
+  "email": {
+    "retryAttempts": 3,
+    "retryDelay": 300
+  },
+  "security": {
+    "rateLimit": {
+      "windowMs": 900000,
+      "maxRequests": 100
+    },
+    "jwt": {
+      "expiresIn": "1h"
+    }
+  },
+  "appointments": {
+    "minNotice": 24,
+    "maxFutureBooking": 90,
+    "reminderTimes": [24, 48],
+    "cancelationPolicy": {
+      "minHours": 24,
+      "penalty": false
+    }
+  },
+  "validation": {
+    "phoneRegex": "^\\+?[1-9]\\d{1,14}$",
+    "emailRegex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+  }
+}

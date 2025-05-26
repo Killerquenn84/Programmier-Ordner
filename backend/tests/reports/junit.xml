@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="31" failures="8" errors="0" time="6.819">
+  <testsuite name="Appointment Unit Tests" errors="0" failures="0" skipped="0" timestamp="2025-05-25T09:15:46" time="5.567" tests="12">
+    <testcase classname="Appointment Unit Tests" name="sollte einen Termin erstellen" time="0.044">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte einen Termin aktualisieren" time="0.041">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte einen Termin löschen" time="0.052">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte einen Termin nach ID finden" time="0.006">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte Termine nach Datum filtern" time="0.008">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte Termine nach Status filtern" time="0.009">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte Termine nach Arzt filtern" time="0.007">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte Termine nach Patient filtern" time="0.009">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte Termine nach Datum und Status filtern" time="0.006">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte Termine nach Datum und Arzt filtern" time="0.005">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte Termine nach Datum und Patient filtern" time="0.006">
+    </testcase>
+    <testcase classname="Appointment Unit Tests" name="sollte Termine nach Status und Arzt filtern" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="Auth Tests" errors="0" failures="8" skipped="0" timestamp="2025-05-25T09:15:46" time="5.644" tests="12">
+    <testcase classname="Auth Tests" name="sollte einen gültigen Token generieren" time="0.013">
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte einen gültigen Token verifizieren" time="0">
+      <failure>Error: Ungültiger Token
+    at verifyToken (C:\Users\flamm\Programmier Ordner\backend\src\utils\auth.ts:51:11)
+    at Object.&lt;anonymous&gt; (C:\Users\flamm\Programmier Ordner\backend\tests\security\auth.test.ts:39:40)
+    at Promise.then.completed (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte einen Fehler bei ungültigem Token werfen" time="0.003">
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte die Authentifizierungs-Middleware korrekt ausführen" time="0.001">
+      <failure>Error: expect(received).toHaveBeenCalled()
+
+Matcher error: received value must be a mock or spy function
+
+Received has value: undefined
+    at Object.&lt;anonymous&gt; (C:\Users\flamm\Programmier Ordner\backend\tests\security\auth.test.ts:69:24)
+    at Promise.then.completed (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte einen Fehler bei fehlendem Token werfen" time="0.004">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+  Object {
+-   &quot;error&quot;: &quot;Kein Token bereitgestellt&quot;,
++   &quot;code&quot;: &quot;AUTH_NO_TOKEN&quot;,
++   &quot;message&quot;: &quot;Kein Token vorhanden&quot;,
+  },
+
+Number of calls: 1
+    at Object.&lt;anonymous&gt; (C:\Users\flamm\Programmier Ordner\backend\tests\security\auth.test.ts:83:26)
+    at Promise.then.completed (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte die Rollenprüfung korrekt ausführen" time="0">
+      <failure>TypeError: next is not a function
+    at C:\Users\flamm\Programmier Ordner\backend\src\utils\auth.ts:132:5
+    at Object.&lt;anonymous&gt; (C:\Users\flamm\Programmier Ordner\backend\tests\security\auth.test.ts:96:5)
+    at Promise.then.completed (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte einen Fehler bei unzureichenden Berechtigungen werfen" time="0.001">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+  Object {
+-   &quot;error&quot;: &quot;Unzureichende Berechtigungen&quot;,
++   &quot;code&quot;: &quot;AUTH_INSUFFICIENT_PERMISSIONS&quot;,
++   &quot;message&quot;: &quot;Keine Berechtigung&quot;,
+  },
+
+Number of calls: 1
+    at Object.&lt;anonymous&gt; (C:\Users\flamm\Programmier Ordner\backend\tests\security\auth.test.ts:113:26)
+    at Promise.then.completed (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte arzt-spezifische Berechtigungen prüfen" time="0">
+      <failure>TypeError: next is not a function
+    at C:\Users\flamm\Programmier Ordner\backend\src\utils\auth.ts:132:5
+    at Object.&lt;anonymous&gt; (C:\Users\flamm\Programmier Ordner\backend\tests\security\auth.test.ts:129:5)
+    at Promise.then.completed (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte einen Fehler bei falscher Arzt-ID werfen" time="0.001">
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte patient-spezifische Berechtigungen prüfen" time="0">
+      <failure>TypeError: next is not a function
+    at C:\Users\flamm\Programmier Ordner\backend\src\utils\auth.ts:132:5
+    at Object.&lt;anonymous&gt; (C:\Users\flamm\Programmier Ordner\backend\tests\security\auth.test.ts:166:5)
+    at Promise.then.completed (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte einen Fehler bei falscher Patient-ID werfen" time="0.001">
+    </testcase>
+    <testcase classname="Auth Tests" name="sollte einen Fehler bei nicht übereinstimmenden Rollen werfen" time="0">
+      <failure>Error: expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+- Expected
++ Received
+
+  Object {
+-   &quot;error&quot;: &quot;Unzureichende Berechtigungen&quot;,
++   &quot;code&quot;: &quot;AUTH_INSUFFICIENT_PERMISSIONS&quot;,
++   &quot;message&quot;: &quot;Keine Berechtigung&quot;,
+  },
+
+Number of calls: 1
+    at Object.&lt;anonymous&gt; (C:\Users\flamm\Programmier Ordner\backend\tests\security\auth.test.ts:203:26)
+    at Promise.then.completed (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at _runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\flamm\Programmier Ordner\backend\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Encryption Service Tests" errors="0" failures="0" skipped="0" timestamp="2025-05-25T09:15:46" time="5.935" tests="7">
+    <testcase classname="Encryption Service Tests" name="sollte einen String verschlüsseln und entschlüsseln" time="0.138">
+    </testcase>
+    <testcase classname="Encryption Service Tests" name="sollte ein Objekt verschlüsseln und entschlüsseln" time="0.105">
+    </testcase>
+    <testcase classname="Encryption Service Tests" name="sollte einen sicheren Hash generieren" time="0.053">
+    </testcase>
+    <testcase classname="Encryption Service Tests" name="sollte einen Hash verifizieren" time="0.153">
+    </testcase>
+    <testcase classname="Encryption Service Tests" name="sollte einen sicheren Schlüssel generieren" time="0">
+    </testcase>
+    <testcase classname="Encryption Service Tests" name="sollte einen Fehler bei ungültiger Verschlüsselung werfen" time="0.064">
+    </testcase>
+    <testcase classname="Encryption Service Tests" name="sollte einen Fehler bei ungültigem verschlüsselten Objekt werfen" time="0.051">
+    </testcase>
+  </testsuite>
+</testsuites>

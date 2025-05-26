@@ -1,0 +1,180 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: healthcare-saas
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: healthcare-secrets
+  namespace: healthcare-saas
+type: Opaque
+data:
+  # Base64 encoded secrets
+  db-password: ${DB_PASSWORD_BASE64}
+  keycloak-admin-password: ${KEYCLOAK_ADMIN_PASSWORD_BASE64}
+  keycloak-db-password: ${KEYCLOAK_DB_PASSWORD_BASE64}
+  keycloak-client-secret: ${KEYCLOAK_CLIENT_SECRET_BASE64}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: healthcare-config
+  namespace: healthcare-saas
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+  VITE_API_URL: "https://api.healthcare-saas.de"
+  VITE_KEYCLOAK_URL: "https://auth.healthcare-saas.de"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: healthcare-saas
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: healthcare-saas/backend:latest
+        ports:
+        - containerPort: 8081
+        envFrom:
+        - configMapRef:
+            name: healthcare-config
+        - secretRef:
+            name: healthcare-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8081
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 5
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: healthcare-saas
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: healthcare-saas/frontend:latest
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: healthcare-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: healthcare-saas
+spec:
+  selector:
+    app: backend
+  ports:
+  - port: 80
+    targetPort: 8081
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: healthcare-saas
+spec:
+  selector:
+    app: frontend
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: healthcare-ingress
+  namespace: healthcare-saas
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - api.healthcare-saas.de
+    - app.healthcare-saas.de
+    - auth.healthcare-saas.de
+    secretName: healthcare-tls
+  rules:
+  - host: api.healthcare-saas.de
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: backend
+            port:
+              number: 80
+  - host: app.healthcare-saas.de
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend
+            port:
+              number: 80 
